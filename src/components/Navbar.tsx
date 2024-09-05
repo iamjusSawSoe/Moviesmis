@@ -3,14 +3,14 @@ import { RootState } from "@/store/store";
 import { navLinks } from "@/utils/constant";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BsFillSunFill, BsSearch } from "react-icons/bs";
 import { MdNightsStay } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { close, logo, menu } from "../assets";
 
-const Navbar = (props: { setSearchValue: (arg0: any) => void; }) => {
+const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
   const { isDarkMode } = useSelector((state: RootState) => state.theme);
   const dispatch = useDispatch();
   const navbarRef = useRef(null);
@@ -18,11 +18,11 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void; }) => {
   const [toggle, setToggle] = useState(false);
   const [lightDarkIcon, setLightDarkIcon] = useState(true);
   const [scrollPos, setScrollPos] = useState(0);
-  const pathName = usePathname(); // Get current pathname
+  const pathName = usePathname();
 
-    useEffect(()=> {
-        document.body.classList.toggle("dark", isDarkMode);
-    },[isDarkMode])
+  useEffect(() => {
+    document.body.classList.toggle("dark", isDarkMode);
+  }, [isDarkMode]);
 
   useEffect(() => {
     function handleScroll() {
@@ -32,7 +32,7 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void; }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []); // Add dependency array to avoid infinite loop
+  }, []);
 
   const changeSearchVal = (val: any) => {
     props.setSearchValue(val);
@@ -43,7 +43,7 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void; }) => {
       ref={navbarRef}
       className={` ${
         scrollPos > 70
-          ? ' dark:bg-primary  dark:border-[#232c36] bg-[#f5f5f5] '
+          ? " dark:bg-primary  dark:border-[#232c36] bg-[#f5f5f5] "
           : "h-[100px] ss:bg-transparent border-transparent"
       } border-b-2 shrink fixed z-10 top-0  w-full flex justify-between items-center py-4 px-8 xl:px-[100px] `}
     >
