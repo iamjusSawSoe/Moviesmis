@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { options } from "./config";
 
-type MovieImage = {
+type SerieImage = {
   backdrops: [
     {
       aspect_ratio: number;
@@ -15,23 +15,23 @@ type MovieImage = {
   ];
 };
 
-const fetchImageMovie = async (
-  movieId: number | undefined
-): Promise<Array<MovieImage>> => {
+const fetchImageTvSeries = async (
+  serieId: number | undefined
+): Promise<Array<SerieImage>> => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_TMDB_URL}/movie/${movieId}/images`,
+    `${process.env.NEXT_PUBLIC_TMDB_URL}/tv/${serieId}/images`,
     options
   );
   const data = await response.json();
   return data;
 };
 
-const useImageMovie = (movieId: number | undefined) => {
+const useImageTvSeries = (serieId: number | undefined) => {
   return useQuery({
-    queryKey: ["movieImage", movieId],
-    queryFn: () => fetchImageMovie(movieId),
-    enabled: !!movieId,
+    queryKey: ["movieImage", serieId],
+    queryFn: () => fetchImageTvSeries(serieId),
+    enabled: !!serieId,
   });
 };
 
-export { fetchImageMovie, useImageMovie };
+export { fetchImageTvSeries, useImageTvSeries };

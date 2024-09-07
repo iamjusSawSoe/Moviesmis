@@ -1,6 +1,7 @@
 "use client";
 
 import { useImageMovie } from "@/hooks/useImageMovie";
+import { useImageTvSeries } from "@/hooks/useImageTvSeries";
 import { useTrending } from "@/hooks/useTrending";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -15,23 +16,36 @@ const WatchNow = () => {
   const dispatch = useDispatch();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
 
-  // State for the current movie ID
   const [movieId, setMovieId] = useState<number | undefined>(undefined);
+  const [seriesId, setSeriesId] = useState<number | undefined>(undefined);
 
-  // Fetch trending movies
-  const { data: trendingList, isPending, isFetching } = useTrending();
+  const trendingQuery = useTrending();
 
-  // Fetch movie images based on movieId
   const movieQuery = useImageMovie(movieId);
+  const seriesQuery = useImageTvSeries(seriesId);
 
-  // Set the first movie ID when trendingList is loaded
   useEffect(() => {
-    if (trendingList && trendingList.length > 0) {
-      setMovieId(trendingList[0].id);
+    if (
+      trendingQuery.data &&
+      trendingQuery.data.length > 0 &&
+      trendingQuery.data.media_type === "movie"
+    ) {
+      setMovieId(trendingQuery.data[0].id);
     }
-  }, [trendingList]);
+  }, [trendingQuery.data]);
 
-  if (isPending || !trendingList) return <div>Loading...</div>;
+  useEffect(() => {
+    if (
+      trendingQuery.data &&
+      trendingQuery.data.length > 0 &&
+      trendingQuery.data.media_type === "tv"
+    ) {
+      setSeriesId(trendingQuery.data[0].id);
+    }
+  }, [trendingQuery.data]);
+
+  if (trendingQuery.isPending || !trendingQuery.data)
+    return <div>Loading...</div>;
 
   return (
     <>
@@ -46,7 +60,7 @@ const WatchNow = () => {
           speed={1000}
           onSlideChange={(swiper) => {
             setActiveSlideIndex(swiper.realIndex);
-            setMovieId(trendingList[swiper.realIndex]?.id); // Update movieId when the slide changes
+            setMovieId(trendingQuery.data[swiper.realIndex]?.id);
           }}
           autoplay={{
             delay: 6000,
@@ -54,12 +68,12 @@ const WatchNow = () => {
             pauseOnMouseEnter: true,
           }}
         >
-          {trendingList?.map((movie, index) => (
+          {trendingQuery.data?.map((movie, index) => (
             <SwiperSlide key={movie.id}>
               <div
-                className={`w-full max-h-[1100px] h-[1100px] lmd:max-h-[100vh] lmd:h-[100vh] bg-no-repeat bg-cover`}
+                className={`w-full max-h-[1100px] h-[1100px] lmd:max-h-[100vh] lmd:h-[100vh] bg-no-repeat bg-cover `}
                 style={{
-                  backgroundImage: `url('${process.env.NEXT_PUBLIC_TMDB_URL}${movieQuery.data?.posters?.[0]?.file_path}')`,
+                  backgroundImage: `url('${process.env.NEXT_PUBLIC_ORIGINAL_IMAGE_URL}/${movieQuery.data?.posters?.[0]?.file_path}')`,
                 }}
               >
                 <div className="w-full h-full bg-dimBlack flex flex-col-reverse lg:flex-row justify-center items-center gap-10">
