@@ -1,51 +1,47 @@
 "use client";
 
-import { useImageMovie } from "@/hooks/useImageMovie";
-import { useImageTvSeries } from "@/hooks/useImageTvSeries";
 import { useTrending } from "@/hooks/useTrending";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Button from "./Button";
 
+const preloadImage = (src: string) => {
+  const img = new Image();
+  img.src = src;
+};
+
 const WatchNow = () => {
   const swiperRef = useRef(null);
-  const [itemId, setItemid] = useState("");
-  const dispatch = useDispatch();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-
-  const [movieId, setMovieId] = useState<number | undefined>(undefined);
-  const [seriesId, setSeriesId] = useState<number | undefined>(undefined);
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false);
+  const [allSlidesData, setAllSlidesData] = useState<any[]>([]);
 
   const trendingQuery = useTrending();
 
-  const movieQuery = useImageMovie(movieId);
-  const seriesQuery = useImageTvSeries(seriesId);
-
   useEffect(() => {
-    if (
-      trendingQuery.data &&
-      trendingQuery.data.length > 0 &&
-      trendingQuery.data.media_type === "movie"
-    ) {
-      setMovieId(trendingQuery.data[0].id);
+    if (trendingQuery.data) {
+      // Map through trending data and extract the image URLs
+      const slidesData = trendingQuery.data.map((item: any) => {
+        let image = "";
+        if (item.media_type === "movie") {
+          image = `${process.env.NEXT_PUBLIC_ORIGINAL_IMAGE_URL}${item.backdrop_path}`;
+        } else if (item.media_type === "tv") {
+          image = `${process.env.NEXT_PUBLIC_ORIGINAL_IMAGE_URL}${item.backdrop_path}`;
+        }
+
+        return { ...item, image };
+      });
+
+      setAllSlidesData(slidesData);
+      setIsImagesLoaded(true);
     }
   }, [trendingQuery.data]);
 
-  useEffect(() => {
-    if (
-      trendingQuery.data &&
-      trendingQuery.data.length > 0 &&
-      trendingQuery.data.media_type === "tv"
-    ) {
-      setSeriesId(trendingQuery.data[0].id);
-    }
-  }, [trendingQuery.data]);
-
-  if (trendingQuery.isPending || !trendingQuery.data)
+  if (trendingQuery.isPending || !isImagesLoaded) {
     return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -60,7 +56,6 @@ const WatchNow = () => {
           speed={1000}
           onSlideChange={(swiper) => {
             setActiveSlideIndex(swiper.realIndex);
-            setMovieId(trendingQuery.data[swiper.realIndex]?.id);
           }}
           autoplay={{
             delay: 6000,
@@ -68,33 +63,33 @@ const WatchNow = () => {
             pauseOnMouseEnter: true,
           }}
         >
-          {trendingQuery.data?.map((movie, index) => (
-            <SwiperSlide key={movie.id}>
+          {allSlidesData?.map((item, index) => (
+            <SwiperSlide key={item.id}>
               <div
-                className={`w-full max-h-[1100px] h-[1100px] lmd:max-h-[100vh] lmd:h-[100vh] bg-no-repeat bg-cover `}
+                className={`w-full h-[100vh] bg-no-repeat bg-cover`}
                 style={{
-                  backgroundImage: `url('${process.env.NEXT_PUBLIC_ORIGINAL_IMAGE_URL}/${movieQuery.data?.posters?.[0]?.file_path}')`,
+                  backgroundImage: `url('${item.image}')`,
                 }}
               >
                 <div className="w-full h-full bg-dimBlack flex flex-col-reverse lg:flex-row justify-center items-center gap-10">
                   <div className="lg:max-w-[800px] mb-28 lmd:mb-40 lg:mb-0">
                     <h1
-                      className={` text-white font-bold text-[30px] lg:text-[45px] leading-[40px] lmd:leading-[30px] mb-6 lmd:mb-10  ${
+                      className={` text-white font-bold text-[30px] lg:text-[45px] leading-[40px] lmd:leading-[30px] mb-6 lmd:mb-10 ${
                         activeSlideIndex === index
                           ? "animate__animated animate__fadeInDown animate__slow"
                           : ""
                       }`}
                     >
-                      {movie.name}
+                      {item.name || item.title}
                     </h1>
                     <p
                       className={`${
                         activeSlideIndex === index
-                          ? "animate__animated animate__fadeInDown animate__slow	"
+                          ? "animate__animated animate__fadeInDown animate__slow"
                           : ""
                       } flex text-white font-semibold px-4 lmd:px-0 text-[16px]  lg:text-[18px] leading-[40px] lmd:w-[800px] lg:w-[650px] text-center`}
                     >
-                      {movie.overview}
+                      {item.overview}
                     </p>
                     <div
                       className={`mt-8  flex ss:block gap-4 ${
