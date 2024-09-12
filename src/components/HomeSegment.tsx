@@ -1,11 +1,13 @@
+import { category, type } from "@/utils/constant";
+import FilmList from "./FilmList";
 import WatchNow from "./WatchNow";
 
 const HomeSegment = () => {
   return (
     <section>
       <WatchNow />
-      {/* <FilmList
-        name="Popular Movie"
+      <FilmList
+        name="Popular Movies"
         category={category.movie}
         type={type.popular}
       />
@@ -23,7 +25,7 @@ const HomeSegment = () => {
         name="Popular Tv Series"
         category={category.tv}
         type={type.popular}
-      /> */}
+      />
     </section>
   );
 };

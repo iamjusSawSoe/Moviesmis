@@ -22,7 +22,6 @@ const WatchNow = () => {
 
   useEffect(() => {
     if (trendingQuery.data) {
-      // Map through trending data and extract the image URLs
       const slidesData = trendingQuery.data.map((item: any) => {
         let image = "";
         if (item.media_type === "movie") {

@@ -161,3 +161,7 @@ body {
     transform: none;
   }
 }
+
+.film-list .swiper-slide {
+  width: auto !important;
+}
