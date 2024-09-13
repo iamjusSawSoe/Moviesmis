@@ -1,4 +1,4 @@
-import { toggleDarkMode } from "@/store/features/themeSlice";
+import { setTheme, toggleDarkMode } from "@/store/features/themeSlice";
 import { RootState } from "@/store/store";
 import { navLinks } from "@/utils/constant";
 import Image from "next/image";
@@ -21,8 +21,19 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
   const pathName = usePathname();
 
   useEffect(() => {
-    document.body.classList.toggle("dark", isDarkMode);
-  }, [isDarkMode]);
+    const savedTheme = localStorage.getItem("theme");
+    dispatch(setTheme(savedTheme));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [dispatch, isDarkMode]);
 
   useEffect(() => {
     function handleScroll() {

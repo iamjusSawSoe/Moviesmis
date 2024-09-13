@@ -16,10 +16,14 @@ export const themeSlice = createSlice({
     toggleDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
     },
+    setTheme: (state, action) => {
+      if (action.payload === "dark") state.isDarkMode = true;
+      if (action.payload === "light") state.isDarkMode = false;
+    },
   },
 });
 
-export const { toggleDarkMode } = themeSlice.actions;
+export const { toggleDarkMode, setTheme } = themeSlice.actions;
 
 export const selectCount = (state: RootState) => state.theme.isDarkMode;
 

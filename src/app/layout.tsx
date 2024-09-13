@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body>
+        <body className="dark:bg-primary bg-white">
           <ReactQueryProvider>{children}</ReactQueryProvider>
         </body>
       </html>
