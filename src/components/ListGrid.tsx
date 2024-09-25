@@ -71,7 +71,9 @@ const ListGrid = ({ category }: ListGrid) => {
               />
             </div>
             <h1 className=" w-[140px] sm:w-auto text-secondary dark:text-white text-[16px] mt-3 group-hover:scale-[0.95] group-hover:ease-in-out group-hover:duration-150  group-hover:text-secondary ">
-              {item.original_title || item.original_name}
+              {"original_title" in item
+                ? item.original_title
+                : item.original_name}
             </h1>
           </div>
         ))}
