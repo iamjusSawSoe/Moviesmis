@@ -98,11 +98,11 @@ const WatchNow = () => {
                       }`}
                     >
                       <Button
-                        styles="bg-secondary ml-2 ss:ml-0  rounded-full text-[20px] w-[180px] h-[50px] shadow-3xl shadow-dimBlack font-[400] ease-in-out duration-500 hover:font-[800] hover:shadow-5xl hover:bg-secondary hover:shadow-dimBlack"
+                        styles="bg-secondary ml-2 ss:ml-0  rounded-full text-[20px] w-[190px] h-[50px] shadow-3xl shadow-dimBlack font-[400] ease-in-out duration-500 hover:font-[800] hover:shadow-5xl hover:bg-secondary hover:shadow-dimBlack"
                         text="Watch Now"
                       />
                       <Button
-                        styles=" ss:mx-5 px-2 bg-dimBlack rounded-full text-[20px] w-[180px] h-[50px] shadow-3xl shadow-dimBlack border-2 font-[400] hover:font-[800] ease-in-out duration-500"
+                        styles=" ss:mx-5 px-2 bg-dimBlack rounded-full text-[20px] w-[190px] h-[50px] shadow-3xl shadow-dimBlack border-2 font-[400] hover:font-[800] ease-in-out duration-500"
                         text="Watch Trailer"
                       />
                     </div>

@@ -114,7 +114,7 @@ const FilmList = (props: Props) => {
         <Swiper
           ref={swiperRef}
           grabCursor={true}
-          spaceBetween={10}
+          spaceBetween={20}
           slidesPerView="auto"
           loopedSlides={20}
           loop={true}
@@ -123,12 +123,12 @@ const FilmList = (props: Props) => {
             disableOnInteraction: true,
             pauseOnMouseEnter: true,
           }}
-          className="film-list"
+          className="film-list "
         >
           {filmList.map((item, index) => (
             <SwiperSlide
               key={index}
-              className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px]"
+              className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
             >
               <div className="h-[305px] rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
                 <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />

@@ -19,7 +19,7 @@ const List = () => {
         </h1>
       </div>
 
-      <ListGrid category={locationURL} />
+      <ListGrid />
     </section>
   );
 };

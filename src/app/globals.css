@@ -165,3 +165,7 @@ body {
 .film-list .swiper-slide {
   width: auto !important;
 }
+
+.film-list {
+  height: 350px;
+}
