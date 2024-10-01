@@ -12,6 +12,14 @@ const MoviesPage = () => {
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = "auto";
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  useEffect(() => {
     if (popularMoviesQuery.isFetched && popularMoviesQuery.data) {
       setItems((prevItems) => [...prevItems, ...popularMoviesQuery.data]);
     }

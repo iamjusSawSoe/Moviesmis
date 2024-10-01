@@ -15,7 +15,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import Button from "./Button";
 
 type Props = { name: string; category: string; type: string };
@@ -24,7 +24,7 @@ const FilmList = (props: Props) => {
   const dispatch = useDispatch();
   const [itemId, setItemid] = useState("");
   const [detailModal, setDetailModal] = useState(false);
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<SwiperRef>(null);
 
   const [filmList, setFilmList] = useState<Movie[] | Series[]>([]);
   const popularMoviesQuery = usePopularMovies(1);
@@ -34,7 +34,6 @@ const FilmList = (props: Props) => {
 
   useEffect(() => {
     if (filmList.length > 0) setFilmList([]);
-
     if (
       props.category === "movie" &&
       props.type === "popular" &&
@@ -111,7 +110,7 @@ const FilmList = (props: Props) => {
           ref={swiperRef}
           grabCursor={true}
           spaceBetween={20}
-          slidesPerView="auto"
+          slidesPerView={"auto"}
           loopedSlides={20}
           loop={true}
           autoplay={{
@@ -124,7 +123,7 @@ const FilmList = (props: Props) => {
           {filmList.length > 0
             ? filmList.map((item, index) => (
                 <SwiperSlide
-                  key={index}
+                  key={item.id}
                   className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
                 >
                   <div className="h-[305px] rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
@@ -139,15 +138,14 @@ const FilmList = (props: Props) => {
                   </div>
                 </SwiperSlide>
               ))
-            : // Skeleton loading
-              Array(6)
+            : Array(6)
                 .fill(0)
                 .map((_, index) => (
                   <SwiperSlide
                     key={index}
-                    className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] "
+                    className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px]"
                   >
-                    <div className="h-[305px] w-[250px] rounded-3xl bg-gray-300 animate-pulse shimmer" />
+                    <div className="h-[305px] rounded-3xl bg-gray-300 animate-pulse" />
                   </SwiperSlide>
                 ))}
         </Swiper>

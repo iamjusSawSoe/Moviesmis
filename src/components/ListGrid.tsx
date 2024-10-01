@@ -36,9 +36,10 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
               <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />
               <Image
                 src={`${process.env.NEXT_PUBLIC_W500_IMAGE_URL}${item.poster_path}`}
-                className="h-[200px] w-[150px] sm:w-auto sm:h-[300px] rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45]"
-                height={300}
-                width={150}
+                className="w-full h-full rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45]"
+                height={0}
+                sizes="auto"
+                width={0}
                 alt="List Grid Image"
               />
             </div>

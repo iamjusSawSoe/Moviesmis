@@ -27,30 +27,9 @@ body {
   text-align: center;
   font-size: 18px;
   background: transparent;
-
-  /* Center slide text vertically */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
   align-items: center;
-}
-
-.swiper-button-prev,
-.swiper-button-next {
-  color: #e2f1f0;
-}
-
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
-  color: var(--secondary-color);
 }
 
 .blue__gradient {
@@ -163,7 +142,35 @@ body {
 }
 
 .film-list .swiper-slide {
-  width: auto !important;
+  width: 15% !important;
+}
+
+/* for screen size md */
+@media only screen and (max-width: 1060px) {
+  .film-list .swiper-slide {
+    width: 20% !important;
+  }
+}
+
+/* for screen size sm */
+@media only screen and (max-width: 768px) {
+  .film-list .swiper-slide {
+    width: 25% !important;
+  }
+}
+
+/* for screen size sm */
+@media only screen and (max-width: 620px) {
+  .film-list .swiper-slide {
+    width: 30% !important;
+  }
+}
+
+/* for screen size sm */
+@media only screen and (max-width: 480px) {
+  .film-list .swiper-slide {
+    width: 45% !important;
+  }
 }
 
 .film-list {
