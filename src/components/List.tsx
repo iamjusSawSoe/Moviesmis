@@ -1,6 +1,5 @@
 "use client";
 import { usePathname } from "next/navigation";
-import ListGrid from "./ListGrid";
 
 const List = () => {
   const pathName = usePathname();
@@ -19,7 +18,7 @@ const List = () => {
         </h1>
       </div>
 
-      <ListGrid />
+      {/* <ListGrid /> */}
     </section>
   );
 };
