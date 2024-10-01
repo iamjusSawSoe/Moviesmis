@@ -14,7 +14,6 @@ const MoviesPage = () => {
   useEffect(() => {
     if (popularMoviesQuery.isFetched && popularMoviesQuery.data) {
       setItems((prevItems) => [...prevItems, ...popularMoviesQuery.data]);
-      console.log("this is from single call", popularMoviesQuery.data);
     }
   }, [popularMoviesQuery.isFetched, popularMoviesQuery.data]);
 
@@ -24,11 +23,13 @@ const MoviesPage = () => {
 
   const loadMore = () => {
     setIsFetchingNextPage(true);
-    console.log("this is from load more");
     setPage((prevPage) => prevPage + 1);
+
     if (popularMoviesQuery.data) {
-      setItems((prevItems) => [...prevItems, ...popularMoviesQuery.data]);
-      setIsFetchingNextPage(false);
+      setTimeout(() => {
+        setItems((prevItems) => [...prevItems, ...popularMoviesQuery.data]);
+        setIsFetchingNextPage(false);
+      }, 2000);
     }
   };
 

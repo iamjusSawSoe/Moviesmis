@@ -78,10 +78,6 @@ const FilmList = (props: Props) => {
     topRatedSeriesQuery.data,
   ]);
 
-  if (popularMoviesQuery.isPending || popularSeriesQuery.isPending) {
-    return <div>Loading...</div>;
-  }
-
   if (popularMoviesQuery.isError || popularSeriesQuery.isError) {
     return <h1> Sorry, there was an error </h1>;
   }
@@ -123,25 +119,37 @@ const FilmList = (props: Props) => {
             disableOnInteraction: true,
             pauseOnMouseEnter: true,
           }}
-          className="film-list "
+          className="film-list"
         >
-          {filmList.map((item, index) => (
-            <SwiperSlide
-              key={index}
-              className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
-            >
-              <div className="h-[305px] rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
-                <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />
-                <Image
-                  alt="movie poster items"
-                  src={`${process.env.NEXT_PUBLIC_W500_IMAGE_URL}${item.poster_path}`}
-                  className="h-[300px] w-auto rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45]"
-                  width={220}
-                  height={0}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
+          {filmList.length > 0
+            ? filmList.map((item, index) => (
+                <SwiperSlide
+                  key={index}
+                  className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
+                >
+                  <div className="h-[305px] rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
+                    <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />
+                    <Image
+                      alt="movie poster items"
+                      src={`${process.env.NEXT_PUBLIC_W500_IMAGE_URL}${item.poster_path}`}
+                      className="h-[300px] w-auto rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45]"
+                      width={220}
+                      height={0}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))
+            : // Skeleton loading
+              Array(6)
+                .fill(0)
+                .map((_, index) => (
+                  <SwiperSlide
+                    key={index}
+                    className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] "
+                  >
+                    <div className="h-[305px] w-[250px] rounded-3xl bg-gray-300 animate-pulse shimmer" />
+                  </SwiperSlide>
+                ))}
         </Swiper>
       </div>
 

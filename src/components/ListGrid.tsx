@@ -3,9 +3,10 @@
 import { Movie } from "@/hooks/useDiscoverMovies";
 import { Series } from "@/hooks/usePopularSeries";
 import Image from "next/image";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
 import { useInView } from "react-intersection-observer";
+import SkeletonLoader from "./SkeletonLoader";
 
 type ListGridProps = {
   items: Movie[] | Series[];
@@ -17,9 +18,6 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
   const { ref, inView } = useInView({ threshold: 0.5 });
 
   useEffect(() => {
-    if (inView) {
-      console.log(inView, "faksdjf");
-    }
     if (inView && !isFetchingNextPage) {
       loadMore();
     }
@@ -51,17 +49,16 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
             </h1>
           </div>
         ))}
-        {/* Skeleton loader when fetching the next page */}
-        {/* {isFetchingNextPage && (
-          <div className="col-span-full">
-            <SkeletonLoader /> 
-          </div>
-        )} */}
-        {/* Observer to detect when the last item is visible */}
-        <div ref={ref} className="h-10">
-          fasdfasdf
-        </div>
-        {/* Scroll trigger for infinite scroll */}
+
+        {isFetchingNextPage && (
+          <React.Fragment>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <SkeletonLoader key={index} />
+            ))}
+          </React.Fragment>
+        )}
+
+        <div ref={ref} className="h-10"></div>
       </div>{" "}
     </section>
   );

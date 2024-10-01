@@ -169,3 +169,62 @@ body {
 .film-list {
   height: 350px;
 }
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 1.8s linear infinite, pulse 1.5s infinite ease-in-out;
+  background: linear-gradient(
+    to right,
+    rgba(237, 237, 237, 0.1) 0%,
+    /* Light gray start */ rgba(255, 255, 255, 0.3) 25%,
+    /* White shimmer */ rgba(237, 237, 237, 0.1) 50% /* Light gray end */
+  );
+  background-size: 200% 100%;
+}
+
+/* for loading css */
+.loader-div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--primary-color);
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader {
+  position: relative;
+  width: 10vw;
+  height: 5vw;
+  padding: 1.5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader span {
+  position: absolute;
+  height: 0.8vw;
+  width: 0.8vw;
+  border-radius: 50%;
+  background-color: var(--secondary-color);
+}
+
+.loader span:nth-child(1) {
+  animation: loading-dotsA 0.5s infinite linear;
+}
+
+.loader span:nth-child(2) {
+  animation: loading-dotsB 0.5s infinite linear;
+}
