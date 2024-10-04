@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalReducer from "./features/modalSlice";
+import searchReducer from "./features/searchSlice";
 import spinningLoadingReducer from "./features/spinningLoadingSlice";
 import themeReducer from "./features/themeSlice";
 
@@ -9,6 +10,7 @@ export const makeStore = () => {
       modal: modalReducer,
       theme: themeReducer,
       spinningLoader: spinningLoadingReducer,
+      search: searchReducer,
     },
   });
 };

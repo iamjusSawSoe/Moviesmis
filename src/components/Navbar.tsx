@@ -1,3 +1,4 @@
+import { changeSearchValue } from "@/store/features/searchSlice";
 import { setTheme, toggleDarkMode } from "@/store/features/themeSlice";
 import { RootState } from "@/store/store";
 import { navLinks } from "@/utils/constant";
@@ -5,12 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BsFillSunFill, BsSearch } from "react-icons/bs";
+import { BsFillSunFill } from "react-icons/bs";
 import { MdNightsStay } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { close, logo, menu } from "../assets";
+import SearchBar from "./SearchBar";
 
-const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
+const Navbar = () => {
   const { isDarkMode } = useSelector((state: RootState) => state.theme);
   const dispatch = useDispatch();
   const navbarRef = useRef(null);
@@ -19,6 +21,22 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
   const [lightDarkIcon, setLightDarkIcon] = useState(true);
   const [scrollPos, setScrollPos] = useState(0);
   const pathName = usePathname();
+
+  const [tempSearchVal, setTempSearchVal] = useState("");
+
+  const changeSearchVal = (val: any) => {
+    setTempSearchVal(val);
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      dispatch(changeSearchValue(tempSearchVal));
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [dispatch, tempSearchVal]);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -44,10 +62,6 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const changeSearchVal = (val: any) => {
-    props.setSearchValue(val);
-  };
 
   return (
     <nav
@@ -87,18 +101,9 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
         </ul>
       </div>
 
-      {/* For Smaller Devices */}
       <div className="flex items-center">
-        <div className="sm:flex hidden items-center">
-          <BsSearch className="text-white leading-9 text-[22px] cursor-pointer absolute m-2 p-1" />
-          <input
-            type="text"
-            name="search"
-            onChange={(event) => changeSearchVal(event.target.value)}
-            placeholder="Search..."
-            className="h-[35px] pl-9 rounded-full bg-slate-500 border-solid border-2 border-dimWhite outline-none"
-            autoComplete="off"
-          />
+        <div className="ss:flex hidden items-center">
+          <SearchBar changeSearchVal={changeSearchVal} />
         </div>
 
         {lightDarkIcon ? (
@@ -119,6 +124,7 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
           />
         )}
 
+        {/* For Smaller Devices */}
         <div className="md:hidden flex items-center">
           <Image
             src={toggle ? close : menu}
@@ -133,7 +139,7 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
             } bg-slate-700 absolute top-[6.3rem] right-0 p-6 rounded-3xl min-w-[160px] mx-4 `}
           >
             <ul className="flex list-none flex-col justify-center items-center flex-1">
-              {navLinks.map((navLink, index) => (
+              {navLinks.map((navLink) => (
                 <li
                   key={navLink.id}
                   className={` ${
@@ -156,14 +162,7 @@ const Navbar = (props: { setSearchValue: (arg0: any) => void }) => {
               ))}
             </ul>
             <div className="flex ss:hidden items-center">
-              <BsSearch className="text-white leading-9 text-[22px] cursor-pointer absolute m-2 p-1" />
-              <input
-                placeholder="Search..."
-                type="text"
-                name="search"
-                className="h-[35px] pl-9 rounded-full bg-slate-500 border-solid border-2 placeholder:text-whiteColor border-dimWhite outline-none"
-                autoComplete="off"
-              />
+              <SearchBar changeSearchVal={changeSearchVal} />
             </div>
           </div>
         </div>

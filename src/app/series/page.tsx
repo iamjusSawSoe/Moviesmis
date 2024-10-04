@@ -18,10 +18,6 @@ const SeriesPage = (props: Props) => {
     }
   }, [popularSeriesQuery.isFetched, popularSeriesQuery.data]);
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
-
   const loadMore = () => {
     setIsFetchingNextPage(true);
     setPage((prevPage) => prevPage + 1);

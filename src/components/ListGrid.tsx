@@ -2,6 +2,7 @@
 
 import { Movie } from "@/hooks/useDiscoverMovies";
 import { Series } from "@/hooks/usePopularSeries";
+import { SearchItem } from "@/hooks/useSearchMulti";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { FaPlay } from "react-icons/fa";
@@ -9,7 +10,7 @@ import { useInView } from "react-intersection-observer";
 import SkeletonLoader from "./SkeletonLoader";
 
 type ListGridProps = {
-  items: Movie[] | Series[];
+  items: Movie[] | Series[] | SearchItem[];
   loadMore: () => void;
   isFetchingNextPage: boolean;
 };
@@ -18,7 +19,7 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
   const { ref, inView } = useInView({ threshold: 0.5 });
 
   useEffect(() => {
-    if (inView && !isFetchingNextPage) {
+    if (inView && isFetchingNextPage) {
       loadMore();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,7 +27,7 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
 
   return (
     <section className="sm:my-14 mx-6 my-6 sm:mx-16">
-      <div className="grid grid-cols-mobileAuto sm:grid-cols-auto gap-6 film-list">
+      <div className="grid grid-cols-mobileAuto sm:grid-cols-auto gap-6 ">
         {items.map((item, index) => (
           <div
             className="group w-[150px] sm:w-[200px] sm:h-[400px]"

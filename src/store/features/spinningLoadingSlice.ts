@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 export interface SpinningLoadingState {
@@ -16,10 +16,15 @@ export const spinningLoadingSlice = createSlice({
     toggleSpinningLoading: (state) => {
       state.isSpinningLoading = !state.isSpinningLoading;
     },
+
+    changeSpinningLoading: (state, action: PayloadAction<boolean>) => {
+      state.isSpinningLoading = action.payload;
+    },
   },
 });
 
-export const { toggleSpinningLoading } = spinningLoadingSlice.actions;
+export const { toggleSpinningLoading, changeSpinningLoading } =
+  spinningLoadingSlice.actions;
 
 export const selectCount = (state: RootState) =>
   state.spinningLoader.isSpinningLoading;

@@ -1,10 +1,9 @@
 "use client";
 
 import { useTrending } from "@/hooks/useTrending";
-import { toggleSpinningLoading } from "@/store/features/spinningLoadingSlice";
-import { RootState } from "@/store/store";
+import { changeSpinningLoading } from "@/store/features/spinningLoadingSlice";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,13 +21,10 @@ const WatchNow = () => {
   const [allSlidesData, setAllSlidesData] = useState<any[]>([]);
   const dispatch = useDispatch();
   const trendingQuery = useTrending();
-  const { isSpinningLoading } = useSelector(
-    (state: RootState) => state.spinningLoader
-  );
 
   useEffect(() => {
     if (trendingQuery.data) {
-      dispatch(toggleSpinningLoading());
+      dispatch(changeSpinningLoading(false));
       const slidesData = trendingQuery.data.map((item: any) => {
         let image = "";
         if (item.media_type === "movie") {
@@ -100,11 +96,11 @@ const WatchNow = () => {
                     }`}
                   >
                     <Button
-                      styles="bg-secondary ml-2 ss:ml-0  rounded-full text-[20px] w-[190px] h-[50px] shadow-3xl shadow-dimBlack font-[400] ease-in-out duration-500 hover:font-[800] hover:shadow-5xl hover:bg-secondary hover:shadow-dimBlack"
+                      styles="bg-secondary ml-2 ss:ml-0  rounded-full text-[20px] w-[200px] h-[50px] shadow-3xl shadow-dimBlack font-[400] ease-in-out duration-500 hover:font-[800] hover:shadow-5xl hover:bg-secondary hover:shadow-dimBlack"
                       text="Watch Now"
                     />
                     <Button
-                      styles=" ss:mx-5 px-2 bg-dimBlack rounded-full text-[20px] w-[190px] h-[50px] shadow-3xl shadow-dimBlack border-2 font-[400] hover:font-[800] ease-in-out duration-500"
+                      styles=" ss:mx-5 px-2 bg-dimBlack rounded-full text-[20px] w-[200px] h-[50px] shadow-3xl shadow-dimBlack border-2 font-[400] hover:font-[800] ease-in-out duration-500"
                       text="Watch Trailer"
                     />
                   </div>
