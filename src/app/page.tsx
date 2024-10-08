@@ -4,15 +4,18 @@ import HomeSegment from "@/components/HomeSegment";
 import ListGrid from "@/components/ListGrid";
 import SpinningLoading from "@/components/loading/SpinningLoading";
 import Navbar from "@/components/Navbar";
+import SearchNotFound from "@/components/SearchNotFound";
 import { SearchItem, useSearchMulti } from "@/hooks/useSearchMulti";
+import { changeSpinningLoading } from "@/store/features/spinningLoadingSlice";
 import { RootState } from "@/store/store";
 import React, { Suspense, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
   const { isSpinningLoading } = useSelector(
     (state: RootState) => state.spinningLoader
   );
+  const dispatch = useDispatch();
   const { searchValue } = useSelector((state: RootState) => state.search);
   const [items, setItems] = useState<SearchItem[]>([]);
   const [page, setPage] = useState(1);
@@ -80,28 +83,38 @@ export default function Home() {
     };
   }, [isSpinningLoading]);
 
+  useEffect(() => {
+    if (searchMultiQuery.isFetching) {
+      dispatch(changeSpinningLoading(true));
+    } else {
+      dispatch(changeSpinningLoading(false));
+    }
+  }, [dispatch, searchMultiQuery.isFetching]);
+
   return (
     <React.Fragment>
       <Navbar />
-      {!searchValue ? (
+      {!searchValue && (
         <Suspense fallback={<SpinningLoading />}>
           <section className="flex-1">
             <HomeSegment />
           </section>
         </Suspense>
-      ) : (
+      )}
+
+      {searchValue && items?.length > 0 && (
         <section className="mt-40 min-h-[100dvh]">
-          {items?.length > 0 && (
-            <>
-              <ListGrid
-                items={items}
-                isFetchingNextPage={isFetchingNextPage}
-                loadMore={loadMore}
-              />
-            </>
-          )}
+          <ListGrid
+            items={items}
+            isFetchingNextPage={isFetchingNextPage}
+            loadMore={loadMore}
+          />
           {!isFetchingNextPage && <Footer />}
         </section>
+      )}
+
+      {searchValue && items?.length == 0 && searchMultiQuery.isFetched && (
+        <SearchNotFound searchQuery={searchValue} />
       )}
 
       {/* <Footer /> */}
