@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Button from "./Button";
+import Button from "../Button"
 
 const preloadImage = (src: string) => {
   const img = new Image();

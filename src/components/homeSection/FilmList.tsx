@@ -10,20 +10,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { FaPlay } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
-import Button from "./Button";
+import Button from "../Button";
+import { RootState } from "@/store/store";
+import { toggleModalDetail } from "@/store/features/modalSlice";
+import DetailModal from "../DetailModal";
+import CastList from "../detailModalSection/CastList";
 
 type Props = { name: string; category: string; type: string };
 
 const FilmList = (props: Props) => {
   const dispatch = useDispatch();
+  const { isModalDetail } = useSelector((state: RootState) => state.modal);
+
   const [itemId, setItemid] = useState("");
-  const [detailModal, setDetailModal] = useState(false);
   const swiperRef = useRef<SwiperRef>(null);
 
   const [filmList, setFilmList] = useState<Movie[] | Series[]>([]);
@@ -85,11 +90,11 @@ const FilmList = (props: Props) => {
   //   document.body.style.overflow = isModalDetail ? "hidden" : "auto";
   // }, [isModalDetail]);
 
-  // const openModalDetail = (id) => {
-  //   setDetailModal(!detailModal);
-  //   swiperRef.current.swiper.autoplay.stop();
-  //   setItemid(id);
-  // };
+  const openModalDetail = (id: string) => {
+    dispatch(toggleModalDetail());
+    // swiperRef.current.swiper.autoplay.stop();
+    setItemid(id);
+  };
 
   return (
     <section className=" mx-6 sm:mx-10 my-10 ">
@@ -104,7 +109,6 @@ const FilmList = (props: Props) => {
           />
         </Link>
       </div>
-
       <div className="mt-8">
         <Swiper
           ref={swiperRef}
@@ -150,8 +154,8 @@ const FilmList = (props: Props) => {
                 ))}
         </Swiper>
       </div>
-
-      {/* {detailModal && (
+      <CastList id="912649" />
+      {/* {isModalDetail && (
         <DetailModal
           openModalDetail={() => openModalDetail()}
           itemId={itemId}

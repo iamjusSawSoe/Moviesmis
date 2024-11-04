@@ -1,6 +1,6 @@
 "use client";
 import Footer from "@/components/Footer";
-import HomeSegment from "@/components/HomeSegment";
+import HomeSegment from "@/components/homeSection/HomeSegment";
 import ListGrid from "@/components/ListGrid";
 import SpinningLoading from "@/components/loading/SpinningLoading";
 import Navbar from "@/components/Navbar";
