@@ -3,8 +3,11 @@
 import { Movie } from "@/hooks/useDiscoverMovies";
 import { usePopularMovies } from "@/hooks/usePopularMovies";
 import { Series, usePopularSeries } from "@/hooks/usePopularSeries";
+import { SearchItem } from "@/hooks/useSearchMulti";
 import { useTopRatedMovies } from "@/hooks/useTopRatedMovies";
 import { useTopRatedSeries } from "@/hooks/useTopRatedSeries";
+import { toggleModalDetail } from "@/store/features/modalSlice";
+import { RootState } from "@/store/store";
 import "animate.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,12 +18,9 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import Button from "../Button";
-import { RootState } from "@/store/store";
-import { toggleModalDetail } from "@/store/features/modalSlice";
-import DetailModal from "../DetailModal";
-import CastList from "../detailModalSection/CastList";
 
 type Props = { name: string; category: string; type: string };
 
@@ -31,7 +31,9 @@ const FilmList = (props: Props) => {
   const [itemId, setItemid] = useState("");
   const swiperRef = useRef<SwiperRef>(null);
 
-  const [filmList, setFilmList] = useState<Movie[] | Series[]>([]);
+  const [filmList, setFilmList] = useState<Movie[] | Series[] | SearchItem[]>(
+    []
+  );
   const popularMoviesQuery = usePopularMovies(1);
   const popularSeriesQuery = usePopularSeries(1);
   const topRatedSeriesQuery = useTopRatedSeries(1);
@@ -110,51 +112,75 @@ const FilmList = (props: Props) => {
         </Link>
       </div>
       <div className="mt-8">
-        <Swiper
-          ref={swiperRef}
-          grabCursor={true}
-          spaceBetween={20}
-          slidesPerView={"auto"}
-          loopedSlides={20}
-          loop={true}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: true,
-            pauseOnMouseEnter: true,
-          }}
-          className="film-list"
-        >
-          {filmList.length > 0
-            ? filmList.map((item, index) => (
+        {filmList.length > 0 ? (
+          <Swiper
+            ref={swiperRef}
+            grabCursor={true}
+            spaceBetween={20}
+            slidesPerView={"auto"}
+            loop={true}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: true,
+              pauseOnMouseEnter: true,
+            }}
+            className="film-list"
+            modules={[Autoplay]}
+          >
+            {filmList.map((item, index) => (
+              <SwiperSlide
+                key={item.id}
+                className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
+              >
+                <div className="h-[305px] relative rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
+                  <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />
+                  <Image
+                    alt={`${
+                      "original_title" in item
+                        ? item.original_title
+                        : item.original_name
+                    }`}
+                    src={`${process.env.NEXT_PUBLIC_W500_IMAGE_URL}${item.poster_path}`}
+                    className=" rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45] "
+                    fill={true}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null; // Prevent looping
+                      e.currentTarget.src = ""; // Clear the image src to hide broken image icon
+
+                      const parentElement =
+                        e.currentTarget.closest(".h-[305px]");
+                      if (parentElement) {
+                        parentElement.classList.add(
+                          "bg-gray-500",
+                          "flex",
+                          "items-center",
+                          "justify-center"
+                        );
+                        parentElement.textContent = "No Image Found";
+                      }
+                    }}
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="film-list gap-5 flex">
+            {Array(6)
+              .fill(0)
+              .map((_, index) => (
                 <SwiperSlide
-                  key={item.id}
-                  className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px] hover:mt-[10px]"
+                  key={index}
+                  className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px]"
                 >
-                  <div className="h-[305px] rounded-3xl hover:scale-[1.05] hover:border-[3px] hover:ease-in-out hover:duration-150 hover:border-secondary">
-                    <FaPlay className="cursor-pointer absolute my-32 mx-20 text-4xl invisible group-hover:visible group-hover:ease-in-out group-hover:duration-500 z-50 text-transparent group-hover:text-secondary" />
-                    <Image
-                      alt="movie poster items"
-                      src={`${process.env.NEXT_PUBLIC_W500_IMAGE_URL}${item.poster_path}`}
-                      className="h-[300px] w-auto rounded-3xl object-fill cursor-pointer group-hover:brightness-[.45]"
-                      width={220}
-                      height={0}
-                    />
-                  </div>
+                  <div className="h-[305px] rounded-3xl bg-gray-300 animate-pulse" />
                 </SwiperSlide>
-              ))
-            : Array(6)
-                .fill(0)
-                .map((_, index) => (
-                  <SwiperSlide
-                    key={index}
-                    className="group xl:w-[11.5%] md:w-[15.1%] lmd:w-[20%] sm:w-[24.2%] ss:w-[28%] w-[45%] h-[320px]"
-                  >
-                    <div className="h-[305px] rounded-3xl bg-gray-300 animate-pulse" />
-                  </SwiperSlide>
-                ))}
-        </Swiper>
+              ))}
+          </div>
+        )}
       </div>
-      <CastList id="912649" />
+      {/* <CastList id="912649" /> */}
       {/* {isModalDetail && (
         <DetailModal
           openModalDetail={() => openModalDetail()}

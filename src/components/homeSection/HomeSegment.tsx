@@ -1,15 +1,11 @@
 import { category, type } from "@/utils/constant";
-import { Suspense } from "react";
 import FilmList from "./FilmList";
 import WatchNow from "./WatchNow";
-import SpinningLoading from "../loading/SpinningLoading";
 
 const HomeSegment = () => {
   return (
     <section>
-      <Suspense fallback={<SpinningLoading />}>
-        <WatchNow />
-      </Suspense>
+      <WatchNow />
       <FilmList
         name="Popular Movies"
         category={category.movie}

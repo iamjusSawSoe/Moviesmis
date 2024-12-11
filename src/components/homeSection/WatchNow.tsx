@@ -2,12 +2,13 @@
 
 import { useTrending } from "@/hooks/useTrending";
 import { changeSpinningLoading } from "@/store/features/spinningLoadingSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import "swiper/css";
 import "swiper/css/autoplay";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import Button from "../Button"
+import Button from "../Button";
 
 const preloadImage = (src: string) => {
   const img = new Image();
@@ -15,7 +16,6 @@ const preloadImage = (src: string) => {
 };
 
 const WatchNow = () => {
-  const swiperRef = useRef(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isImagesLoaded, setIsImagesLoaded] = useState(false);
   const [allSlidesData, setAllSlidesData] = useState<any[]>([]);
@@ -44,21 +44,16 @@ const WatchNow = () => {
   return (
     <section>
       <Swiper
-        ref={swiperRef}
         grabCursor={true}
-        spaceBetween={0}
-        slidesPerView={1}
-        loopedSlides={5}
-        loop={true}
-        speed={1000}
         onSlideChange={(swiper) => {
           setActiveSlideIndex(swiper.realIndex);
         }}
         autoplay={{
-          delay: 6000,
+          delay: 4000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
+        modules={[Autoplay]}
       >
         {allSlidesData?.map((item, index) => (
           <SwiperSlide key={item.id}>

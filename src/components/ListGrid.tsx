@@ -61,7 +61,7 @@ const ListGrid = ({ items, loadMore, isFetchingNextPage }: ListGridProps) => {
         )}
 
         <div ref={ref} className="h-10"></div>
-      </div>{" "}
+      </div>
     </section>
   );
 };
